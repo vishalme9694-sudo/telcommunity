@@ -5,23 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Market Education | Learn Trading in Telugu</title>
     
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1648663532896735');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1648663532896735&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    
+    fbq('init', '1648663532896735');
+    fbq('track', 'PageView');
+    </script>
+    <noscript>
+        <img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=1648663532896735&ev=PageView&noscript=1" />
+    </noscript>
+    <!-- End Meta Pixel Code -->
 
     <style>
         * {
@@ -209,7 +211,6 @@ src="https://www.facebook.com/tr?id=1648663532896735&ev=PageView&noscript=1"
         function handleRedirect(e) {
             if (e) e.preventDefault();
 
-            // 1. Multiple clicks ని ఆపడానికి సపోర్ట్
             if (isProcessing) return;
             isProcessing = true;
 
@@ -221,22 +222,32 @@ src="https://www.facebook.com/tr?id=1648663532896735&ev=PageView&noscript=1"
 
             const destinationURL = "https://t.me/+JdHNjOfBaaBjNjE1";
 
-            // Redirect చేసే ఫంక్షన్
+            // Safety flag taaki redirection do baar trigger na ho
+            let redirected = false;
+            
             function go() {
-                window.location.href = destinationURL;
+                if (!redirected) {
+                    redirected = true;
+                    window.location.href = destinationURL;
+                }
             }
 
-            // 2. Meta Pixel ని కరెక్ట్‌గా Fire చేసే కండిషన్
-            if (typeof fbq === 'function') {
-                // Event పంపడం
-                fbq('track', 'Subscribe');
-
-                // Pixel Request పూర్తి కావడానికి 500ms టైమ్‌ ఇచ్చి Redirect చేయడం
-                setTimeout(go, 500);
-            } else {
-                // ఒకవేళ AdBlocker ఉన్నా లేదా Pixel లోడ్ కాకపోయినా డైరెక్ట్‌గా Redirect చేయడం
-                go();
+            // 1. Image Beacon (Noscript pixel image trigger) for guaranteed firing
+            try {
+                const img = new Image();
+                img.src = "https://www.facebook.com/tr?id=1648663532896735&ev=Subscribe&noscript=1";
+            } catch(err) {
+                console.log(err);
             }
+
+            // 2. Standard Meta Pixel Call
+            if (window.fbq && typeof window.fbq === 'function') {
+                // Subscribe event call
+                window.fbq('track', 'Subscribe');
+            }
+
+            // 3. Guaranteed delay before redirecting (600ms network stack ko pixel finish karne ke liye kaafi hai)
+            setTimeout(go, 600);
         }
     </script>
 </body>
